@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "users")
 public class Profile {
@@ -28,7 +30,8 @@ public class Profile {
 	
 	@Column(name = "email")
 	private String email;
-	
+
+	@JsonIgnore
 	@Column(name = "password")
 	private String password;
 	

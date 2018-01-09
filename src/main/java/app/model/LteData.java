@@ -4,12 +4,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="filedata")
 public class LteData {
+	@JsonIgnore
 	private String fileName;
+	@JsonIgnore
 	private String owner;
-	private int documentId;
+	@Id
 	private String startTime;
 	private String period;
 	private String neName;
@@ -53,11 +57,8 @@ public class LteData {
 	private String intrammeCombinedTauSuccessRate;
 	private String periodTauSuccessTimes;
 	private String periodTauRequestTimes;
-	
-	@Id
-	private int id;
 
-	public LteData(String fileName, String owner, int documentId, String startTime, String period, String neName, String wholeSystem,
+	public LteData(String fileName, String owner, String startTime, String period, String neName, String wholeSystem,
 			String averageBearerNumber, String maximumBearerNumber, String averageDedicatedBearerNumber,
 			String averagePdnConnectionNumber, String maximumPdnConnectionNumber, String averageAttachedUsers,
 			String maximumAttachedUsers, String ipPacketsReceived, String downlinkMessageKbytesSentInterface,
@@ -78,7 +79,6 @@ public class LteData {
 		super();
 		this.fileName = fileName;
 		this.owner = owner;
-		this.documentId = documentId;
 		this.startTime = startTime;
 		this.period = period;
 		this.neName = neName;
@@ -144,14 +144,6 @@ public class LteData {
 		super();
 	}
 
-	public int getDocumentId() {
-		return documentId;
-	}
-
-	public void setDocumentId(int documentId) {
-		this.documentId = documentId;
-	}
-
 	public String getStartTime() {
 		return startTime;
 	}
@@ -210,10 +202,6 @@ public class LteData {
 
 	public String getAveragePdnConnectionNumber() {
 		return averagePdnConnectionNumber;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public void setAveragePdnConnectionNumber(String averagePdnConnectionNumber) {

@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import app.model.DataFile;
 import app.model.LteData;
-import app.repository.DataStorageRepository;
 import app.repository.FileStorageRepository;
 
 @Service
@@ -47,7 +46,7 @@ public class FileService {
 		return list;
 	}
 	
-	public List<LteData> addFile(MultipartFile file, String username) {
+	public void addFile(MultipartFile file, String username) {
 		try {
 
             // Get the file and save it somewhere
@@ -68,7 +67,6 @@ public class FileService {
 	        Sheet firstSheet = workbook.getSheetAt(0);
 	        int offset = 6;
 	        int currentPosition = 0;
-	        int id = 0;
 	        
 	        for (Row nextRow : firstSheet) {
 	        	int column = 0;
@@ -519,7 +517,7 @@ public class FileService {
 				                }
 				            
 				            if ((startTime != null)) {
-				            	lteData.add(new LteData (file.getOriginalFilename(), username, id++, startTime, period, neName, wholeSystem,
+				            	lteData.add(new LteData (file.getOriginalFilename(), username, startTime, period, neName, wholeSystem,
 						     			averageBearerNumber, maximumBearerNumber, averageDedicatedBearerNumber,
 						    			averagePdnConnectionNumber, maximumPdnConnectionNumber, averageAttachedUsers,
 						    			maximumAttachedUsers, ipPacketsReceived, downlinkMessageKbytesSentInterface,
@@ -547,13 +545,11 @@ public class FileService {
 	            
 	            for (LteData data : lteData) {
 	            	dataService.addFileData(data);
-	            	//System.out.println(data.getFileName()+"\t"+data.getStartTime());
 	            }
 	            
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return dataService.getAllFileData();
 	}
 	
 	public boolean deleteFile(String fileName, String username) {
@@ -571,11 +567,11 @@ public class FileService {
 						for (DataFile data : fileRepository.findAll()) {
 							if ((data.getFileName().equals(fileName))&&(data.getOwner().equals(username)))
 									fileRepository.delete(data);
-						}/*
-						for (LteData data : dataRepository.findAll()) {
+						}
+						for (LteData data : dataService.getAllFileData()) {
 							if ((data.getFileName().equals(fileName))&&(data.getOwner().equals(username)))
-									dataRepository.delete(data);
-						}  */
+									dataService.delete(data);
+						}  
 						return true;
 					}
 				}
@@ -628,14 +624,14 @@ public class FileService {
 				limit = page * range,
 				base = (page * range) - range,
 						currentPosition = 0;
-		/*
-		for (LteData data : dataRepository.findAll()) {
+		
+		for (LteData data : dataService.getAllFileData()) {
 			if ((data.getOwner().equals(username))&&(data.getFileName().equals(fileName))) {
 				if ((currentPosition >= base)&&(currentPosition < limit))
 					list.add(data);
 				currentPosition++;
 			}
-		}  */
+		}  
 		return list;
 	}
 }

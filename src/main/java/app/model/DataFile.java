@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "files")
 public class DataFile {
 
-	@Id
+	
 	@Column(name = "id")
 	private int id;
 	
@@ -24,6 +24,7 @@ public class DataFile {
 	@Column(name = "owner")
 	private String owner;
 	
+	@Id
 	@Column(name = "date")
 	private Date date;
 
@@ -32,7 +33,6 @@ public class DataFile {
 	}
 	
 	public DataFile(String fileName, String description, String owner) {
-		this.id++;
 		this.fileName = fileName;
 		this.description = description;
 		this.owner = owner;

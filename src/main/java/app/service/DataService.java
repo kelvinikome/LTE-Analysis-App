@@ -21,4 +21,8 @@ public class DataService {
 	public void addFileData(LteData data) {
 		storageRepository.save(data);
 	}
+
+	public void delete(LteData data) {
+		storageRepository.delete(data);
+	}
 }

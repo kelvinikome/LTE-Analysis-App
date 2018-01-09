@@ -26,8 +26,8 @@ public class FileController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="files")
-	public List<LteData> addFile(@PathVariable String username, @RequestParam("file") MultipartFile file) {
-		return fileService.addFile(file, username);
+	public void addFile(@PathVariable String username, @RequestParam("file") MultipartFile file) {
+		fileService.addFile(file, username);
 	}
 
 	@RequestMapping(method=RequestMethod.PUT, value="files/data")

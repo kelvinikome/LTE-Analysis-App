@@ -30,21 +30,27 @@ public class Application extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private ProfileService profileService = new ProfileService();
-     
+     /*
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         for (Profile profile : profileService.getAllProfiles())
         	auth.inMemoryAuthentication().withUser(profile.getUsername()).password("password").roles("USER");
-    }
-     
+    } */
+
+	@Autowired
+	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        for (Profile profile : profileService.getAllProfiles())
+        	auth.inMemoryAuthentication().withUser(profile.getUsername()).password(profile.getPassword()).roles("USER");
+	}
+	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-  
-      http.csrf().disable()
-        .authorizeRequests()
-        .antMatchers("/user/**").hasRole("USER")
-        .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
-        .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//We don't need sessions to be created.
+      
+        http.csrf().disable()
+          .authorizeRequests()
+          .antMatchers("/user/**").hasRole("USER")
+          .and().httpBasic()
+          .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
      
     @Bean

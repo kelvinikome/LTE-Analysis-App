@@ -31,7 +31,6 @@ CREATE TABLE `filedata` (
   `average_bearer_number` varchar(255) DEFAULT NULL,
   `average_dedicated_bearer_number` varchar(255) DEFAULT NULL,
   `average_pdn_connection_number` varchar(255) DEFAULT NULL,
-  `document_id` int(11) NOT NULL,
   `downlink_message_kbytes_sent_interface` varchar(255) DEFAULT NULL,
   `file_name` varchar(255) DEFAULT NULL,
   `intra_based_handover_request_times` varchar(255) DEFAULT NULL,
@@ -91,7 +90,7 @@ DROP TABLE IF EXISTS `files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `files` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
