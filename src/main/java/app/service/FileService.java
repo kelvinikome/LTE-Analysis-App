@@ -10,11 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -27,10 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import app.model.DataFile;
 import app.model.LteData;
-import app.model.Profile;
 import app.repository.DataStorageRepository;
 import app.repository.FileStorageRepository;
-import app.repository.ProfileRepository;
 
 @Service
 public class FileService {
@@ -39,7 +34,7 @@ public class FileService {
 	FileStorageRepository fileRepository;
 
 	@Autowired
-	private DataStorageRepository dataRepository;
+	private DataService dataService;
 	
 	private String storageDirectory = "userdata/";
 	
@@ -53,7 +48,6 @@ public class FileService {
 	}
 	
 	public List<LteData> addFile(MultipartFile file, String username) {
-		int number = 0;
 		try {
 
             // Get the file and save it somewhere
@@ -66,7 +60,6 @@ public class FileService {
         }
 		
 		List<LteData> lteData = new ArrayList<>();
-		Map<String, List<LteData>> tempFile = new HashMap<>();
 		
 		try {
 			FileInputStream inputStream = new FileInputStream(new File(storageDirectory+username+"/"+file.getOriginalFilename()));
@@ -553,14 +546,14 @@ public class FileService {
 	            fileRepository.save(new DataFile(file.getOriginalFilename(), "description", username));
 	            
 	            for (LteData data : lteData) {
-	            	dataRepository.save(data);
+	            	dataService.addFileData(data);
 	            	//System.out.println(data.getFileName()+"\t"+data.getStartTime());
 	            }
 	            
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return dataRepository.findAll();
+		return dataService.getAllFileData();
 	}
 	
 	public boolean deleteFile(String fileName, String username) {
@@ -635,10 +628,10 @@ public class FileService {
 				limit = page * range,
 				base = (page * range) - range,
 						currentPosition = 0;
-		
-		/*for (LteData data : dataRepository.findAll()) {
+		/*
+		for (LteData data : dataRepository.findAll()) {
 			if ((data.getOwner().equals(username))&&(data.getFileName().equals(fileName))) {
-				if (currentPosition >= base)
+				if ((currentPosition >= base)&&(currentPosition < limit))
 					list.add(data);
 				currentPosition++;
 			}

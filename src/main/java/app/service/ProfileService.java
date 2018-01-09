@@ -1,18 +1,12 @@
 package app.service;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import app.model.Profile;
 import app.repository.ProfileRepository;
 
 @Service
-@ComponentScan("com.app")
 public class ProfileService {
 	
 	@Autowired

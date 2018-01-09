@@ -1,6 +1,5 @@
 package app.controller;
 
-import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import app.model.DataFile;
 import app.model.LteData;
-import app.model.Profile;
 import app.service.FileService;
 
 @RestController
