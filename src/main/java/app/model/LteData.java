@@ -1,8 +1,19 @@
 package app.model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -12,9 +23,11 @@ public class LteData {
 	@JsonIgnore
 	private String fileName;
 	@JsonIgnore
-	private String owner;
-	@Id
-	private String startTime;
+	private String owner;@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private int id;
+	private Date startTime;
 	private String period;
 	private String neName;
 	private String wholeSystem;
@@ -79,7 +92,14 @@ public class LteData {
 		super();
 		this.fileName = fileName;
 		this.owner = owner;
-		this.startTime = startTime;
+	    
+	    try {
+			this.startTime = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(startTime);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+			
 		this.period = period;
 		this.neName = neName;
 		this.wholeSystem = wholeSystem;
@@ -142,14 +162,6 @@ public class LteData {
 
 	public LteData() {
 		super();
-	}
-
-	public String getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
 	}
 
 	public String getPeriod() {
@@ -258,6 +270,10 @@ public class LteData {
 
 	public String getSaeBearerSetupSuccessTimes() {
 		return saeBearerSetupSuccessTimes;
+	}
+
+	public Date getStartTime() {
+		return startTime;
 	}
 
 	public void setSaeBearerSetupSuccessTimes(String saeBearerSetupSuccessTimes) {
@@ -406,6 +422,10 @@ public class LteData {
 
 	public void setAuthenticationRequestTimes(String authenticationRequestTimes) {
 		this.authenticationRequestTimes = authenticationRequestTimes;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
 	public String getAuthenticationSuccessTimes() {

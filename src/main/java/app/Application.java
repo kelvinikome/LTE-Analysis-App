@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import app.CustomBasicAuthenticationEntryPoint;
-
 import app.model.Profile;
 import app.service.ProfileService;
 
@@ -61,6 +60,7 @@ public class Application extends WebSecurityConfigurerAdapter implements Filter 
 
 	@Autowired
 	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+		//auth.inMemoryAuthentication().withUser("admin").password("admin").roles("USER");
         for (Profile profile : profileService.getAllProfiles())
         	auth.inMemoryAuthentication().withUser(profile.getUsername()).password(profile.getPassword()).roles("USER");
 	}

@@ -31,7 +31,7 @@ public class Profile {
 	@Column(name = "email")
 	private String email;
 
-	@JsonIgnore
+	//@JsonIgnore
 	@Column(name = "password")
 	private String password;
 	

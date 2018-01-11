@@ -33,7 +33,7 @@ public class ProfileController {
 		return profileService.updateProfile(profile);
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE, value="/user/{username}")
+	@RequestMapping(method=RequestMethod.POST, value="/user/{username}")
 	public void deleteUser(@RequestBody Profile profile, @PathVariable String username) {
 		profileService.deleteUser(profile);
 	}

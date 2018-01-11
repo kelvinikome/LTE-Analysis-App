@@ -10,15 +10,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -617,21 +625,52 @@ public class FileService {
 		}
 		return false;
 	}
-
-	public List<LteData> getPaginatedFileData(String fileName, int page, String username) {
-		List<LteData> list = new ArrayList<>();
-		int range = 5,
-				limit = page * range,
-				base = (page * range) - range,
-						currentPosition = 0;
-		
-		for (LteData data : dataService.getAllFileData()) {
-			if ((data.getOwner().equals(username))&&(data.getFileName().equals(fileName))) {
-				if ((currentPosition >= base)&&(currentPosition < limit))
-					list.add(data);
-				currentPosition++;
-			}
-		}  
+	
+	public Map<Integer, Date> getTimeData(String fileName, String username) {
+		 Map<Integer, Date> list = new HashMap<>();
+		 Integer id = 1;
+		 for (LteData data : dataService.getAllFileData())
+			 if ((data.getOwner().equals(username))&&(data.getFileName().equals(fileName)))
+					 list.put(id++, data.getStartTime());
+		 
 		return list;
 	}
+	
+	
+	public List<LteData> getFilteredFileData(String fileName, String startDate, String endDate, String username) {
+		 List<LteData> list = new ArrayList<>();
+
+	        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	        try {
+
+	            Date start = formatter.parse(startDate);
+	            Date end = formatter.parse(endDate);
+
+	            //System.out.println(formatter.format(start));
+	            //System.out.println(formatter.format(end));
+
+	            start = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(formatter.format(start));
+	            end = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(formatter.format(end));
+	            
+	            for (LteData data : dataService.getAllFileData()) {
+	   			 if ((((data.getOwner().equals(username))&&(data.getFileName().equals(fileName))))&&
+	   				((data.getStartTime().after(start))||(data.getStartTime().equals(start)))) {
+	   					if ((data.getStartTime().after(end))||(data.getStartTime().equals(end)))
+	   						break;
+		   					 list.add(data);
+	   			 }
+	   			 
+	   		 }
+
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	        }
+		 
+		 
+			 
+		return list;
+	} 
+	
+	
 }

@@ -1,7 +1,14 @@
 package app.controller;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +20,7 @@ import app.model.DataFile;
 import app.model.LteData;
 import app.service.FileService;
 
+@CrossOrigin
 @RestController
 @RequestMapping ("/user/{username}/")
 public class FileController {
@@ -40,9 +48,15 @@ public class FileController {
 			fileService.deleteFile(fileName, username);
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value="files/data")
+	@RequestMapping(method=RequestMethod.GET, value="files/datafilter")
 	public List<LteData> getFileData(@PathVariable String username, @RequestParam("fileName") String fileName,
-																		@RequestParam("page") int page) {
-		return fileService.getPaginatedFileData(fileName, page, username);
+			@RequestParam("start") String start,
+			@RequestParam("end") String end) {
+		return fileService.getFilteredFileData(fileName, start, end, username);
+	}  
+
+	@RequestMapping(method=RequestMethod.GET, value="files/data")
+	public Map<Integer, Date> getFilteredFileData(@PathVariable String username, @RequestParam("fileName") String fileName) {
+		return fileService.getTimeData(fileName, username);
 	} 
 }  
